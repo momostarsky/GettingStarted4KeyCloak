@@ -42,3 +42,17 @@
 /home/dhz/jpdata/allms/KASD/GettingStarted/obj/Debug/net8.0/ref/GettingStarted.dll
 /home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/GettingStarted.xml
 /home/dhz/jpdata/allms/KASD/GettingStarted/obj/Debug/net8.0/GettingStarted.xml
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/obj/Debug/net8.0/GettingStarted.MvcApplicationPartsAssemblyInfo.cs
+/home/dhz/jpdata/allms/KASD/GettingStarted/obj/Debug/net8.0/GettingStarted.sourcelink.json
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.Extensions.Caching.Memory.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.Extensions.Logging.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
+/home/dhz/jpdata/allms/KASD/GettingStarted/bin/Debug/net8.0/Microsoft.Extensions.Options.dll
