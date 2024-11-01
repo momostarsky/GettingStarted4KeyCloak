@@ -5,6 +5,7 @@ using GettingStarted.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 // <snippet_UsingOpenApiModels>
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<TodoContext>(options => options.UseInMemoryDatabas
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+////注册SwaggerAPI文档服务
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -22,7 +24,31 @@ builder.Services.AddSwaggerGen(options =>
         Description = "An ASP.NET Core Web API for managing ToDo items"
         
     });
-    // using System.Reflection;
+    //
+    ///////////////BEGIN 调用Swagger API的时候需要授权/////////////////////////////
+    
+    var scheme = new OpenApiSecurityScheme()
+    {
+        Description = "Authorization header. \r\nExample: 'Bearer 12345abcdef'",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Authorization"
+        },
+        Scheme = "oauth2",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+    };
+    options.AddSecurityDefinition("Authorization", scheme);
+    var requirement = new OpenApiSecurityRequirement
+    {
+        [scheme] = new List<string>()
+    };
+    options.AddSecurityRequirement(requirement);
+    //
+    ///////////////END 调用Swagger API的时候需要授权/////////////////////////////
+    // 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -56,6 +82,8 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
+        //页面API文档格式 Full=全部展开， List=只展开列表, None=都不展开
+        options.DocExpansion(DocExpansion.List);
     });
 }
  

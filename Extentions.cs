@@ -2,6 +2,11 @@ using GettingStarted.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace GettingStarted;
 
@@ -17,7 +22,7 @@ public static class Extentions
         services.AddAuthorization();
     }
 
-//MODIFICATION
+
     static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var keycloakSettings = configuration.GetSection("Authentication:Keycloak");
