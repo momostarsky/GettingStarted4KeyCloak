@@ -1,10 +1,12 @@
 using GettingStarted.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GettingStarted.Controllers;
 // <snippet_ClassDeclaration>
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class TodoController: ControllerBase

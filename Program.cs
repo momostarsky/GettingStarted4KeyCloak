@@ -2,12 +2,14 @@ using System.Reflection;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.OpenApi.Models;
 using GettingStarted.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
 // <snippet_UsingOpenApiModels>
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddDbContext<TodoContext>(options =>
-    options.UseInMemoryDatabase("Todo"));
+builder.Services.AddDbContext<TodoContext>(options => options.UseInMemoryDatabase("Todo"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -18,29 +20,34 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Title = "Getting Started  API",
         Description = "An ASP.NET Core Web API for managing ToDo items"
-        // TermsOfService = new Uri("https://example.com/terms"),
-        // Contact = new OpenApiContact
-        // {
-        //     Name = "Example Contact",
-        //     Url = new Uri("https://example.com/contact")
-        // },
-        // License = new OpenApiLicense
-        // {
-        //     Name = "Example License",
-        //     Url = new Uri("https://example.com/license")
-        // }
+        
     });
     // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-// builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
-// builder.Services.AddAuthorization();
+//Add support for Json Web Token.
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.Audience = builder.Configuration["Authentication:Audience"];
+        x.MetadataAddress = builder.Configuration["Authentication:MetaDataAddress"]!;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"]
+        };
+    });
  
+
 var app = builder.Build();
-// Configure the HTTP request pipeline.
-// <snippet_Middleware>
 if (app.Environment.IsDevelopment())
 {
 
@@ -63,6 +70,9 @@ using (var serviceScope = app.Services.CreateScope())
     var context = serviceScope.ServiceProvider.GetRequiredService<TodoContext>();
 
     context.TodoItems.Add(new TodoItem { Name = "Item #1" });
+    context.TodoItems.Add(new TodoItem { Name = "Item #2" });
+    context.TodoItems.Add(new TodoItem { Name = "Item #3" });
+    context.TodoItems.Add(new TodoItem { Name = "Item #4" });
     await context.SaveChangesAsync();
 }
 
