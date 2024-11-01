@@ -24,28 +24,63 @@ builder.Services.AddSwaggerGen(options =>
         Description = "An ASP.NET Core Web API for managing ToDo items"
         
     });
-    //
-    ///////////////BEGIN 调用Swagger API的时候需要授权/////////////////////////////
-    
-    var scheme = new OpenApiSecurityScheme()
+    options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
     {
-        Description = "Authorization header. \r\nExample: 'Bearer 12345abcdef'",
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows
+        {
+            Implicit = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri("http://localhost:8080/realms/MyRealm/protocol/openid-connect/auth"),
+                Scopes = new Dictionary<string, string>
+                {
+                    { "openid", "openid" },
+                    { "profile", "profile" }
+                }
+            }
+        }
+    });
+    
+    OpenApiSecurityScheme keycloakSecurityScheme = new()
+    {
         Reference = new OpenApiReference
         {
+            Id = "Keycloak",
             Type = ReferenceType.SecurityScheme,
-            Id = "Authorization"
         },
-        Scheme = "oauth2",
-        Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
+        Name = "Bearer",
+        Scheme = "Bearer",
     };
-    options.AddSecurityDefinition("Authorization", scheme);
-    var requirement = new OpenApiSecurityRequirement
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        [scheme] = new List<string>()
-    };
-    options.AddSecurityRequirement(requirement);
+        { keycloakSecurityScheme, Array.Empty<string>() },
+    });
+    
+    
+    // //
+    // ///////////////BEGIN 调用Swagger API的时候需要授权/////////////////////////////
+    //
+    // var scheme = new OpenApiSecurityScheme()
+    // {
+    //     Description = "Authorization header. \r\nExample: 'Bearer 12345abcdef'",
+    //     Reference = new OpenApiReference
+    //     {
+    //         Type = ReferenceType.SecurityScheme,
+    //         Id = "Authorization"
+    //     },
+    //     Scheme = "oauth2",
+    //     Name = "Authorization",
+    //     In = ParameterLocation.Header,
+    //     Type = SecuritySchemeType.ApiKey,
+    // };
+    // options.AddSecurityDefinition("Authorization", scheme);
+    // var requirement = new OpenApiSecurityRequirement
+    // {
+    //     [scheme] = new List<string>()
+    // };
+    // options.AddSecurityRequirement(requirement);
     //
     ///////////////END 调用Swagger API的时候需要授权/////////////////////////////
     // 
@@ -84,6 +119,7 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
         //页面API文档格式 Full=全部展开， List=只展开列表, None=都不展开
         options.DocExpansion(DocExpansion.List);
+        options.OAuthClientId("library-api-client");
     });
 }
  
